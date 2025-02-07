@@ -1,5 +1,8 @@
 import { useState } from "react";
 import initialBooks from "../data/data";
+import { Navbar } from "./Navbar";
+import { Footer } from "./Footer";
+import { Button } from "./Button";
 
 export default function App() {
   const [book, setBook] = useState(initialBooks);
@@ -36,22 +39,6 @@ export default function App() {
       </div>
       <Footer />
     </>
-  );
-}
-
-function Navbar() {
-  return (
-    <div className="navbar">
-      <h1>Library Management System</h1>
-    </div>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="footer">
-      <p>&copy; 2025 Library Management System</p>
-    </footer>
   );
 }
 
@@ -148,13 +135,5 @@ function Form({ onAddBook }) {
         <Button onClick={(e) => handleAddBook(e)}>Add</Button>
       </div>
     </form>
-  );
-}
-
-function Button({ children, onClick, style }) {
-  return (
-    <button style={style} onClick={onClick}>
-      {children}
-    </button>
   );
 }
