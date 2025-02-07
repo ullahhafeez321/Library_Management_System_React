@@ -80,17 +80,17 @@ body {
 
 .form-group input,
 .form-group select {
-  width: 100%;
+  width: 40%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid #c2b7b7;
   border-radius: 4px;
 }
 
 .form-group button {
   display: block;
-  width: 100%;
+  width: 20%;
   padding: 0.75rem;
-  background-color: #007bff;
+  background-color: #135296;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -99,15 +99,15 @@ body {
 }
 
 .form-group button:hover {
-  background-color: #0056b3;
+  background-color: #0a68cd;
 }
 
 /* Footer */
 .footer {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 10.3rem;
   padding: 1rem 0;
-  background: #007bff;
+  background: #135296;
   color: #fff;
   font-size: 0.875rem;
 }
