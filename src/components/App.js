@@ -13,26 +13,16 @@ export default function App() {
     setShowForm((showForm) => !showForm);
   }
 
-  const style = {
-    marginTop: "25px",
-    color: "#fff",
-    backgroundColor: "#135296",
-    borderRaduis: "3px",
-    display: "block",
-    width: "10%",
-    padding: "0.75rem",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "1rem",
-  };
+  function handleDeleteBook(id) {
+    setBook((book) => book.filter((book) => (book.id === id ? null : id)));
+  }
 
   return (
     <>
       <Navbar />
       <main className="container">
-        <BookList books={book} />
-        <Button onClick={handleShowForm} style={style}>
+        <BookList books={book} onDeleteBook={handleDeleteBook} />
+        <Button className="responsive-btn" onClick={handleShowForm}>
           {showForm ? "Close" : "+ Add Book"}
         </Button>
         {showForm ? (
@@ -46,7 +36,7 @@ export default function App() {
   );
 }
 
-function BookList({ books }) {
+function BookList({ books, onDeleteBook }) {
   return (
     <table className="table">
       <thead>
@@ -60,15 +50,33 @@ function BookList({ books }) {
         </tr>
       </thead>
       <tbody>
-        {books.map((book, i) => (
-          <Book book={book} id={i + 1} key={book.id} />
-        ))}
+        <>
+          {!books.length ? (
+            <tr>
+              <td
+                colSpan={6}
+                style={{ textAlign: "center", margin: "20px 0", color: "#555" }}
+              >
+                No books available. <strong>Add books</strong> to the list.
+              </td>
+            </tr>
+          ) : (
+            books.map((book, i) => (
+              <Book
+                book={book}
+                id={i + 1}
+                key={book.id}
+                onDeleteBook={onDeleteBook}
+              />
+            ))
+          )}
+        </>
       </tbody>
     </table>
   );
 }
 
-function Book({ book, id }) {
+function Book({ book, id, onDeleteBook }) {
   return (
     <tr>
       <td>{id}</td>
@@ -78,7 +86,7 @@ function Book({ book, id }) {
       <td>{book.status}</td>
       <td>
         <Button>Borrow</Button>
-        <Button>Delete</Button>
+        <Button onClick={() => onDeleteBook(book.id)}>Delete</Button>
       </td>
     </tr>
   );
