@@ -1,8 +1,8 @@
 import { useState } from "react";
 import initialBooks from "../data/data";
-import { Navbar } from "./Navbar";
-import { Footer } from "./Footer";
-import { Button } from "./Button";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import Button from "./Button";
 
 export default function App() {
   const [book, setBook] = useState(initialBooks);
@@ -30,13 +30,17 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <div className="container">
+      <main className="container">
         <BookList books={book} />
         <Button onClick={handleShowForm} style={style}>
           {showForm ? "Close" : "+ Add Book"}
         </Button>
-        {showForm ? <Form onAddBook={setBook} /> : false}
-      </div>
+        {showForm ? (
+          <Form onAddBook={setBook} setShowForm={setShowForm} />
+        ) : (
+          false
+        )}
+      </main>
       <Footer />
     </>
   );
@@ -80,7 +84,7 @@ function Book({ book, id }) {
   );
 }
 
-function Form({ onAddBook }) {
+function Form({ onAddBook, setShowForm }) {
   const [bookName, setBookName] = useState("");
   const [author, setAuthor] = useState("");
   const [genere, setGenere] = useState("");
@@ -88,11 +92,14 @@ function Form({ onAddBook }) {
   function handleAddBook(e) {
     e.preventDefault();
 
+    if (!bookName || !author || !genere) return;
+
     const id = crypto.randomUUID();
     const newBook = { id, book: bookName, author, genere, status: "Available" };
 
     onAddBook((book) => [...book, newBook]);
 
+    setShowForm(false);
     setAuthor("");
     setBookName("");
     setGenere("");
