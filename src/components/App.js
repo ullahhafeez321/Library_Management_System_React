@@ -8,21 +8,39 @@ export default function App() {
   const [book, setBook] = useState(initialBooks);
   const [showForm, setShowForm] = useState(false);
 
-  function handleShowForm(e) {
-    e.preventDefault();
+  function handleShowForm() {
     setShowForm((showForm) => !showForm);
   }
 
   function handleDeleteBook(id) {
-    setBook((book) => book.filter((book) => (book.id === id ? null : id)));
+    const alerts = window.confirm("Are you sure want to Delete the Book?");
+    if (!alerts) return;
+    setBook((book) => book.filter((book) => (book.id === id ? null : book)));
+  }
+
+  function handleBorrowBook(id) {
+    setBook((books) =>
+      books.map((book) =>
+        book.id === id
+          ? {
+              ...book,
+              status: book.status === "Available" ? "Borrowed" : "Available",
+            }
+          : book
+      )
+    );
   }
 
   return (
     <>
       <Navbar />
       <main className="container">
-        <BookList books={book} onDeleteBook={handleDeleteBook} />
-        <Button className="responsive-btn" onClick={handleShowForm}>
+        <BookList
+          books={book}
+          onDeleteBook={handleDeleteBook}
+          onBorrow={handleBorrowBook}
+        />
+        <Button className="show-btn" onClick={handleShowForm}>
           {showForm ? "Close" : "+ Add Book"}
         </Button>
         {showForm ? (
@@ -36,7 +54,7 @@ export default function App() {
   );
 }
 
-function BookList({ books, onDeleteBook }) {
+function BookList({ books, onDeleteBook, onBorrow }) {
   return (
     <table className="table">
       <thead>
@@ -67,6 +85,7 @@ function BookList({ books, onDeleteBook }) {
                 id={i + 1}
                 key={book.id}
                 onDeleteBook={onDeleteBook}
+                onBorrow={onBorrow}
               />
             ))
           )}
@@ -76,17 +95,21 @@ function BookList({ books, onDeleteBook }) {
   );
 }
 
-function Book({ book, id, onDeleteBook }) {
+function Book({ book, id, onDeleteBook, onBorrow }) {
   return (
     <tr>
       <td>{id}</td>
       <td>{book.book}</td>
-      <td>{book.genere}</td>
       <td>{book.author}</td>
+      <td>{book.genere}</td>
       <td>{book.status}</td>
       <td>
-        <Button>Borrow</Button>
-        <Button onClick={() => onDeleteBook(book.id)}>Delete</Button>
+        <Button className="table-btn" onClick={() => onBorrow(book.id)}>
+          {book.status === "Available" ? "Borrow" : "Return"}
+        </Button>
+        <Button className="table-btn" onClick={() => onDeleteBook(book.id)}>
+          Delete
+        </Button>
       </td>
     </tr>
   );
